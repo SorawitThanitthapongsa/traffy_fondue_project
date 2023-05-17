@@ -27,20 +27,20 @@ df_type_pro["duration"] = df_type_pro["last_activity"]-df_type_pro["timestamp"]
 
 print(df_type_pro)
 
-# df_type_pro = df_type_pro[df_type_pro["district"].isnull() == False]
-# df_type_pro = df_type_pro[df_type_pro["type"].isnull() == False]
-# df_type_pro = df_type_pro[df_type_pro["type"] != "{}"]
+df_type_pro = df_type_pro[df_type_pro["district"].isnull() == False]
+df_type_pro = df_type_pro[df_type_pro["type"].isnull() == False]
+df_type_pro = df_type_pro[df_type_pro["type"] != "{}"]
 
-# df_type_pro_dpro = df_type_pro.drop(columns=["province","state","photo","photo_after"])
-# df_type_pro_dpro['type'] = [x[1:-1] for x in df_type_pro_dpro['type']]
-# df_type_pro_dpro['type']= df_type_pro_dpro['type'].str.split(",", n = 1, expand = False)
-# type_df = df_type_pro_dpro[df_type_pro_dpro.type.apply(lambda x: len(x)) == 1]
-# type_df.style
-
-# df_feature = df_type_pro_dpro[['type', 'district','timestamp','duration']]
+df_type_pro_dpro = df_type_pro.drop(columns=["province","state","photo","photo_after"])
+df_type_pro_dpro['type'] = [x[1:-1] for x in df_type_pro_dpro['type']]
+df_type_pro_dpro['type']= df_type_pro_dpro['type'].str.split(",", n = 1, expand = False)
+type_df = df_type_pro_dpro[df_type_pro_dpro.type.apply(lambda x: len(x)) == 1]
 
 
-# model = GridSearchCV(estimator=RandomForestRegressor(),param_grid=dict(criterion=['gini','entropy'],max_depth=[2,3,6],min_samples_leaf=[2,5,10],
-#     n_estimators=[100,200], random_state=[2020]),scoring='f1_weighted',cv=5,n_jobs=-1
-# ) 
+df_feature = df_type_pro_dpro[['type', 'district','timestamp','duration']]
+
+
+model = GridSearchCV(estimator=RandomForestRegressor(),param_grid=dict(criterion=['gini','entropy'],max_depth=[2,3,6],min_samples_leaf=[2,5,10],
+    n_estimators=[100,200], random_state=[2020]),scoring='f1_weighted',cv=5,n_jobs=-1
+) 
 
