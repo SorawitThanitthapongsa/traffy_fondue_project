@@ -40,7 +40,15 @@ type_df = df_type_pro_dpro[df_type_pro_dpro.type.apply(lambda x: len(x)) == 1]
 df_feature = df_type_pro_dpro[['type', 'district','timestamp','duration']]
 
 
-model = GridSearchCV(estimator=RandomForestRegressor(),param_grid=dict(criterion=['gini','entropy'],max_depth=[2,3,6],min_samples_leaf=[2,5,10],
-    n_estimators=[100,200], random_state=[2020]),scoring='f1_weighted',cv=5,n_jobs=-1
-) 
+# model = GridSearchCV(estimator=RandomForestRegressor(),param_grid=dict(criterion=['gini','entropy'],max_depth=[2,3,6],min_samples_leaf=[2,5,10],
+#     n_estimators=[100,200], random_state=[2020]),scoring='f1_weighted',cv=5,n_jobs=-1
+# ) 
+
+df_feature['duration'] = pd.to_timedelta(df_feature['duration'])
+df_feature['duration'] = df_feature['duration'] / pd.Timedelta(hours=1)
+df_feature.rename(columns={'duration': 'duration_hour'}, inplace=True)
+
+
+df_feature.to_csv("cleaned_data.csv")
+
 
