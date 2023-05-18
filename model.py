@@ -4,13 +4,14 @@ from sklearn.model_selection import train_test_split
 import pandas as pd
 import numpy as np
 from sklearn import metrics
+import pickle
+import joblib
 
 def model():
 
     path = "./data_cleaned.csv"
     data = pd.read_csv(path)
-
-
+    path_saved_model = 'model.sav'
 
     nominal_columns = ["type","district"]
 
@@ -32,7 +33,11 @@ def model():
     print('MSE:', metrics.mean_squared_error(y_test, predictions))
     print('RMSE:', np.sqrt(metrics.mean_squared_error(y_test, predictions)))
 
-model()
+    pickle.dump(model_RF, open(path_saved_model, 'wb'))
+
+    return path_saved_model
+
+print( "path of model = ",model())
 
 
 
