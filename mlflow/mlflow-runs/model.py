@@ -28,7 +28,13 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_
 
 mlflow.set_tracking_uri("http://localhost:5001")
 with mlflow.start_run():
-    model_RF = RandomForestRegressor(bootstrap = False, max_depth = 40, max_features = 10, min_samples_leaf = 3, min_samples_split = 36, n_estimators = 120)
+    maxdepth = 40
+    max_features = 10
+    min_samples_leaf = 4
+    min_samples_split = 36
+    n_estimators = 120
+    
+    model_RF = RandomForestRegressor(bootstrap = False, max_depth = maxdepth, max_features = max_features, min_samples_leaf = min_samples_leaf, min_samples_split = min_samples_split, n_estimators = n_estimators)
 
     model_RF.fit(X_train, y_train)
 
@@ -41,6 +47,12 @@ with mlflow.start_run():
     print('MSE:', mse)
     print('RMSE:', rmse)
     
+    mlflow.log_param("max_depth", maxdepth)
+    mlflow.log_param("max_features", max_features)
+    mlflow.log_param("min_samples_leaf", min_samples_leaf)
+    mlflow.log_param("min_samples_split", min_samples_split)
+    mlflow.log_param("n_estimators", n_estimators)
+    
     mlflow.log_metric("mse", mse)
     mlflow.log_metric("rmse", rmse)
     mlflow.log_metric("mae", mae)
@@ -48,7 +60,6 @@ with mlflow.start_run():
     pickle.dump(model_RF, open(path_saved_model, 'wb'))
     mlflow.set_tag("mlflow.runName", "model-"+time.strftime("%Y%m%d-%H:%M:%S"))
     tracking_url_type_store = urlparse(mlflow.get_tracking_uri()).scheme
-    print(tracking_url_type_store)
     if tracking_url_type_store != "file":
         mlflow.sklearn.log_model(model_RF, "model", registered_model_name="RandomForestRegressor")
     else:
