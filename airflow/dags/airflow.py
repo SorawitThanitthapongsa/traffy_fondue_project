@@ -48,7 +48,7 @@ def clean_data():
     df_type_pro_dpro = df_type_pro.drop(columns=["province","state","photo","photo_after"])
     df_type_pro_dpro['type'] = [x[1:-1] for x in df_type_pro_dpro['type']]
     df_type_pro_dpro['type']= df_type_pro_dpro['type'].str.split(",", n = 1, expand = False)
-    type_df = df_type_pro_dpro[df_type_pro_dpro.type.apply(lambda x: len(x)) == 1]
+    df_type_pro_dpro = df_type_pro_dpro[df_type_pro_dpro.type.apply(lambda x: len(x)) == 1]
 
     df_feature = df_type_pro_dpro[['type', 'district','timestamp','duration']]
 
@@ -56,9 +56,7 @@ def clean_data():
     df_feature['duration'] = df_feature['duration'] / pd.Timedelta(hours=1)
     df_feature.rename(columns={'duration': 'duration_hour'}, inplace=True)
 
-    df_feature.to_csv("/opt/airflow/dags/data/cleaned_data.csv")
-
-
+    df_feature.to_csv("/opt/airflow/dags/data/cleaned_data.csv",index=False)
 
 with DAG(
     dag_id='traffy_fetch_data',
